@@ -1,6 +1,6 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM maven:3.9.6-eclipse-temurin-17-alpine
 WORKDIR /app
 COPY . .
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+RUN mvn clean package -DskipTests
 EXPOSE 8080
 CMD ["sh", "-c", "java -jar target/*.jar"]
