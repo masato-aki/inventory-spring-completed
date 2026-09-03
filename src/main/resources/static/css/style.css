@@ -1,0 +1,135 @@
+/* 全体の余白リセット */
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+/* 🟩 2カラム（左右分離）レイアウト */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+/* 🟩 左側：サイドバーのデザイン */
+.sidebar {
+  width: 240px;
+  background-color: #1e293b; /* ダークグレー */
+  color: #fff;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+.sidebar h2 {
+  font-size: 1.1rem;
+  padding: 0 20px 15px;
+  border-bottom: 1px solid #334155;
+  margin-top: 0;
+  color: #94a3b8;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.menu-item {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-left: 4px solid transparent;
+}
+.menu-item:hover {
+  background-color: #334155;
+}
+/* 選択中のメニュー項目 */
+.menu-item.active {
+  background-color: #0f172a;
+  border-left-color: #3b82f6; /* 青色の差し色 */
+  color: #60a5fa;
+  font-weight: bold;
+}
+/* 🟩 右側：メインコンテンツのデザイン */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+}
+.container {
+  max-width: 800px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+h1 {
+  font-size: 1.4rem;
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 10px;
+  color: #1e293b;
+  margin-top: 0;
+}
+.search-box {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+input[type="text"] {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  width: 200px;
+}
+button {
+  padding: 8px 18px;
+  font-size: 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #1d4ed8;
+}
+.result-box {
+  margin-top: 25px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+th,
+td {
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  text-align: center;
+}
+th {
+  background-color: #f8fafc;
+  color: #475569;
+}
+.nodata {
+  color: #94a3b8;
+}
+
+/* 2カラムレイアウト用（画面幅をフル活用） */
+.task-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 左右 1:1 の均等分割 */
+  gap: 24px;
+  align-items: start;
+}
+
+/* スマホや画面幅が狭いときは自動で縦並びに切替 */
+@media (max-width: 1024px) {
+  .task-grid-container {
+    grid-template-columns: 1fr;
+  }
+}

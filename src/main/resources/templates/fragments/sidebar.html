@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+  <aside class="sidebar" th:fragment="sidebar(activeMenu)">
+    <h2>業務メニュー</h2>
+    <nav>
+      <ul>
+        <li class="menu-item" th:classappend="${activeMenu == 'top' ? 'active' : ''}">
+          <a th:href="@{/}">TOPページ画面へ</a>
+        </li>
+        <li class="menu-item" th:classappend="${activeMenu == 'task1' ? 'active' : ''}">
+          <a th:href="@{/task1}">1. 組織情報照会</a>
+        </li>
+        <li class="menu-item" th:classappend="${activeMenu == 'task2' ? 'active' : ''}">
+          <a th:href="@{/task2}">2. 組織別品目照会</a>
+        </li>
+        <li class="menu-item" th:classappend="${activeMenu == 'task3' ? 'active' : ''}">
+          <a th:href="@{/task3}">3. 複数品目・組織照会</a>
+        </li>
+        <li class="menu-item" th:classappend="${activeMenu == 'task4' ? 'active' : ''}">
+          <a th:href="@{/task4}">4. 組織別品目原価照会</a>
+        </li>
+        <li class="menu-item" th:classappend="${activeMenu == 'task5' ? 'active' : ''}">
+          <a th:href="@{/task5}">5. 保管場所・在庫照会</a>
+        </li>
+        <li class="menu-item">6. 課題6（準備中）</li>
+        <li class="menu-item">7. 課題7（準備中）</li>
+        <li class="menu-item">8. 課題8（準備中）</li>
+        <li class="menu-item">9. 課題9（準備中）</li>
+        <li class="menu-item">10. 課題10（準備中）</li>
+      </ul>
+    </nav>
+  </aside>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>組織別品目照会</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    /* 左右 1:1（50%ずつ）のハーフ＆ハーフレイアウト */
+    .task-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 左: 50% / 右: 50% */
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .task-container { grid-template-columns: 1fr; } /* タブレット・スマホ時は1列 */
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- 共通サイドバー呼び出し -->
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeMenu})}"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+      <div class="container" style="max-width: 100%;">
+        <h1>【課題2】組織別品目照会</h1>
+
+        <div class="task-container">
+          
+          <!-- 👈 左側（半分）：課題仕様画像（task2.png） -->
+          <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <img th:src="@{/images/task2.png}" alt="課題2仕様" style="width: 100%; height: auto; display: block; border-radius: 4px;">
+          </div>
+
+          <!-- 👉 右側（半分）：業務画面 ＆ 検索結果 ＆ ストーリー ＆ 開閉式SQL -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            
+            <!-- ① 業務を想定した画面（常時表示カード） -->
+            <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+              <div style="padding: 12px 16px; font-weight: bold; font-size: 0.9rem; color: #1e293b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                社内SEの業務を想定した画面
+              </div>
+              
+              <div style="padding: 16px;">
+                <!-- 動作確認用注記 -->
+                <p style="color: #e11d48; font-weight: bold; font-size: 0.85rem; margin-top: 0; margin-bottom: 12px;">
+                  ※動作確認用：組織IDに「43」、品目IDに「10004」を入力して検索
+                </p>
+
+                <!-- 検索フォーム -->
+                <form th:action="@{/task2}" method="get" class="search-box" style="margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: fit-content;">
+                  <label for="orgId" style="white-space: nowrap; font-weight: bold; font-size: 0.88rem;">組織ID：</label>
+                  <input
+                    type="text"
+                    id="orgId"
+                    name="orgId"
+                    th:value="${orgId}"
+                    placeholder="例:43"
+                    maxlength="4"
+                    style="width: 70px; text-align: center; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.88rem;"
+                  />
+
+                  <label for="itemId" style="white-space: nowrap; font-weight: bold; font-size: 0.88rem; margin-left: 8px;">品目ID：</label>
+                  <input
+                    type="text"
+                    id="itemId"
+                    name="itemId"
+                    th:value="${itemId}"
+                    placeholder="10004"
+                    maxlength="8"
+                    style="width: 90px; text-align: center; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.88rem;"
+                  />
+
+                  <button type="submit" style="padding: 6px 16px; cursor: pointer;">検索</button>
+                </form>
+
+                <!-- 検索結果テーブル -->
+                <div class="result-box" style="margin: 0;">
+                  <h2 style="font-size: 0.95rem; margin-bottom: 8px;">検索結果</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>組織コード (拠点識別記号)</th>
+                        <th>品目コード (品番)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:if="${list == null or #lists.isEmpty(list)}">
+                        <td colspan="2" class="nodata">
+                          <span>該当するデータが見つかりません</span>
+                        </td>
+                      </tr>
+                      <tr th:each="item : ${list}">
+                        <td th:text="${item.organizationCode}">04</td>
+                        <td th:text="${item.segment1}">B-0004</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              <!-- 業務想定説明 -->
+<p style="color: #475569; font-size: 0.85rem; margin-top: 14px; margin-bottom: 0; line-height: 1.5;">
+  ※社内SEがシステム内で使われている組織ID（<span th:text="${orgId != null and orgId != '' ? orgId : '43'}">43</span>）と品目ID（<span th:text="${itemId != null and itemId != '' ? itemId : '10004'}">10004</span>）を検索し、工場の社員さんたちの間で呼ばれる組織コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].organizationCode : '04'}">04</span>）や品目コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].segment1 : 'B-0004'}">B-0004</span>）と紐付いていることを確認するためにこの検索を行った。すなわち組織IDも組織コードも同じ工場を意味し、品目IDも品目コードも同じ商品を意味する。
+</p>
+
+              </div>
+            </div>
+
+            <!-- ② 裏側で動くSQL -->
+            <details style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background-color: #0f172a;">
+              <summary style="padding: 10px 16px; cursor: pointer; font-weight: bold; font-size: 0.85rem; color: #38bdf8; user-select: none;">
+                裏側で実行されているSQLを表示（クリックで開閉）
+              </summary>
+              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155;">
+                <pre style="margin: 0; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5;">SELECT p.organization_code, i.segment1
+FROM mtl_system_items_b i
+JOIN mtl_parameters p ON i.organization_id = p.organization_id
+WHERE i.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '43'}">43</span>
+  AND i.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10004'}">10004</span>;</pre>
+              </div>
+            </details>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>

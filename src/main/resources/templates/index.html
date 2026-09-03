@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在庫管理システム・DBデータ照会ツール</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- 共通サイドバー呼び出し -->
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeMenu})}"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+      <div class="container" style="max-width: 850px; margin: 20px auto; padding: 0 20px;">
+        
+        <!-- メインタイトル -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="font-size: 1.8rem; color: #1e293b; border-bottom: 3px solid #2563eb; display: inline-block; padding-bottom: 10px;">
+            ■ 在庫管理システム・DBデータ照会ツール
+          </h1>
+        </div>
+
+        <!-- 開発背景と目的・工夫点（統合枠） -->
+        <div style="background-color: #ffffff; border: 2px solid #3b82f6; border-radius: 12px; padding: 28px 32px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);">
+          <h2 style="color: #1e3a8a; margin-top: 0; font-size: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 16px;">
+            ■ 本アプリの作成背景と目的
+          </h2>
+          
+          <p style="color: #334155; line-height: 1.85; font-size: 0.98rem; text-align: left; margin-bottom: 16px;">
+            八王子の先輩からいただいたSQL課題に取り組んだことによりデータ抽出条件を考える非常に良い勉強になりました。
+          </p>
+
+          <p style="color: #334155; line-height: 1.85; font-size: 0.98rem; text-align: left; margin-bottom: 16px;">
+            DBツールでSQL実行をするだけではもったいないなと思い、SQL課題で利用したDBをベースとする業務アプリを作成することにしました。前提として1つの会社のIT管理部門のSEや工場で働く現場の社員さんがアプリ上で検索操作を行った状況をこのアプリ製作者が勝手ながら想像しております。そしてアプリの裏側で課題の答えであったSQLがどのようにソース上で生成され実行され、アプリの画面に表示されるのか一連の流れを体感することを目的としております。
+          </p>
+
+          <p style="color: #334155; line-height: 1.85; font-size: 0.98rem; text-align: left; margin-bottom: 0;">
+            ポイントとして各画面ごとに利用者がアプリを実際に操作したシーンをイメージしており単にDBの数字（ID）をそのまま表示するのではなく、画面上に現場用コードや利用シーンの注釈（ストーリー）を添え、利用者目線でアプリの操作を進められる様に制作しました。
+          </p>
+        </div>
+
+      
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>
