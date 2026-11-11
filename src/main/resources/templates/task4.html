@@ -4,41 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>組織別品目原価照会</title>
+  <!-- Thymeleaf: @{...} 記法で静的CSSのパスを自動解決 -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <style>
     /* 左右 1:1（50%ずつ）のハーフ＆ハーフレイアウト */
     .task-container {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* 左: 50% / 右: 50% */
+      grid-template-columns: 1fr 1fr;
       gap: 24px;
       align-items: start;
     }
     @media (max-width: 1024px) {
-      .task-container { grid-template-columns: 1fr; } /* タブレット・スマホ時は1列 */
+      .task-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app-layout">
-    <!-- 共通サイドバー呼び出し -->
+    <!-- Thymeleaf: 共通サイドバー展開（activeMenuでカレントメニューをアクティブ化） -->
     <div th:replace="~{fragments/sidebar :: sidebar(${activeMenu})}"></div>
 
-    <!-- メインコンテンツ -->
+    <!-- メインコンテンツエリア -->
     <main class="main-content">
       <div class="container" style="max-width: 100%;">
         <h1>【課題4】組織別品目原価照会</h1>
 
         <div class="task-container">
           
-          <!-- 👈 左側（半分）：課題仕様画像（task4.png） -->
+          <!-- 左側エリア: 仕様・問題画像 -->
           <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <!-- Thymeleaf: 静的画像リソース（task4.png）のパス解決 -->
             <img th:src="@{/images/task4.png}" alt="課題4仕様" style="width: 100%; height: auto; display: block; border-radius: 4px;">
           </div>
 
-          <!-- 👉 右側（半分）：業務画面 ＆ 検索結果 ＆ ストーリー ＆ 開閉式SQL -->
+          <!-- 右側エリア: 業務操作画面・検索結果・解説・SQL -->
           <div style="display: flex; flex-direction: column; gap: 16px;">
             
-            <!-- ① 業務を想定した画面（常時表示カード） -->
+            <!-- 業務操作・結果表示カード -->
             <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
               <div style="padding: 12px 16px; font-weight: bold; font-size: 0.9rem; color: #1e293b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                 業務を想定した画面
@@ -50,9 +54,10 @@
                   ※動作確認用：組織IDに「44」、品目IDに「10005」を入力して検索
                 </p>
 
-                <!-- 検索フォーム -->
+                <!-- 検索フォーム: Springの Controller (@GetMapping("/task4")) へ複数パラメータ送信 -->
                 <form th:action="@{/task4}" method="get" class="search-box" style="margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: fit-content;">
                   <label for="orgId" style="white-space: nowrap; font-weight: bold; font-size: 0.88rem;">組織ID：</label>
+                  <!-- Thymeleaf: 入力値を保持・再表示 -->
                   <input
                     type="text"
                     id="orgId"
@@ -64,6 +69,7 @@
                   />
 
                   <label for="itemId" style="white-space: nowrap; font-weight: bold; font-size: 0.88rem; margin-left: 8px;">品目ID：</label>
+                  <!-- Thymeleaf: 入力値を保持・再表示 -->
                   <input
                     type="text"
                     id="itemId"
@@ -73,7 +79,6 @@
                     maxlength="8"
                     style="width: 90px; text-align: center; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.88rem;"
                   />
-
                   <button type="submit" style="padding: 6px 16px; cursor: pointer;">検索</button>
                 </form>
 
@@ -89,47 +94,51 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <!-- Thymeleaf: 該当データなしの判定表示 -->
                       <tr th:if="${list == null or #lists.isEmpty(list)}">
                         <td colspan="3" class="nodata">
                           <span>該当するデータが見つかりません</span>
                         </td>
                       </tr>
+
+                      <!-- Thymeleaf: ループ展開とフォーマット処理 -->
                       <tr th:each="item : ${list}">
                         <td th:text="${item.organizationCode}">05</td>
                         <td th:text="${item.segment1}">B-0005</td>
+                        <!-- Thymeleaf: #numbers.formatInteger で3桁カンマ区切りと通貨記号を付与 -->
                         <td th:text="${'¥' + #numbers.formatInteger(item.itemCost, 1, 'COMMA')}">¥1,200</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
-         <!-- 業務想定説明 -->
-<p style="color: #475569; font-size: 0.85rem; margin-top: 14px; margin-bottom: 0; line-height: 1.5;">
-  ※本社の社内SEが、部品発注部の社員から「この部品の原価をすぐ教えてほしい！」と頼まれ、システム内の組織IDや品目IDで検索し、工場勤務社員の間で呼ばれている組織コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].organizationCode : '05'}">05</span>）や品目コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].segment1 : 'B-0005'}">B-0005</span>）に紐付く品目原価を調べて回答する作業を想定しています。
-</p>
-
+                <!-- 業務想定説明 -->
+                <p style="color: #475569; font-size: 0.85rem; margin-top: 14px; margin-bottom: 0; line-height: 1.5;">
+                  ※本社の社内SEが、部品発注部の社員から「この部品の原価をすぐ教えてほしい！」と頼まれ、システム内の組織IDや品目IDで検索し、工場勤務社員の間で呼ばれている組織コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].organizationCode : '05'}">05</span>）や品目コード（<span th:text="${list != null and !#lists.isEmpty(list) ? list[0].segment1 : 'B-0005'}">B-0005</span>）に紐付く品目原価を調べて回答する作業を想定しています。
+                </p>
               </div>
             </div>
 
-            <!-- ② 裏側で動くSQL -->
+            <!-- バックエンド実行SQL開閉エリア -->
             <details style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background-color: #0f172a;">
               <summary style="padding: 10px 16px; cursor: pointer; font-weight: bold; font-size: 0.85rem; color: #38bdf8; user-select: none;">
                 裏側で実行されているSQLを表示（クリックで開閉）
               </summary>
               <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155;">
-                <pre style="margin: 0; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5;">SELECT p.organization_code, i.segment1, ROUND(c.item_cost) AS item_cost
-FROM cst_item_costs c
-JOIN mtl_system_items_b i ON c.inventory_item_id = i.inventory_item_id AND c.organization_id = i.organization_id
-JOIN mtl_parameters p ON c.organization_id = p.organization_id
-WHERE c.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '44'}">44</span>
-  AND c.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10005'}">10005</span>;</pre>
+                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; line-height: 1.5;">
+                  SELECT p.organization_code, i.segment1, ROUND(c.item_cost) AS item_cost<br>
+                  FROM cst_item_costs c<br>
+                  JOIN mtl_system_items_b i ON c.inventory_item_id = i.inventory_item_id AND c.organization_id = i.organization_id<br>
+                  JOIN mtl_parameters p ON c.organization_id = p.organization_id<br>
+                  <!-- Thymeleaf: パラメータ埋め込みプレビュー -->
+                  WHERE c.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '44'}">44</span><br>
+                  &nbsp;&nbsp;AND c.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10005'}">10005</span>;
+                </code>
               </div>
             </details>
 
           </div>
-
         </div>
-
       </div>
     </main>
   </div>
