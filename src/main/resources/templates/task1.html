@@ -54,6 +54,15 @@
                 </p>
 
                 <!-- 検索フォーム: Springの Controller (@GetMapping("/task1")) へGETリクエスト送信 -->
+                <!-- 
+                   【HTTPメソッドの使い分け（GET と POST の比較）】
+                    ■ GET（今回採用：データ検索・取得向き）
+                      ・メリット：検索条件がURLに付与されるため（例: /task1?orgId=43）、ブックマークやURL共有、ブラウザ更新(F5)がしやすい。
+                      ・デメリット：URLに値が丸見えになるためパスワードや個人情報には不向き。送信できるデータ量にも上限がある。
+                    ■ POST（新規登録・更新・削除・ログイン向き）
+                      ・メリット：データがリクエストボディに隠れるため秘匿性が高く、大容量のデータも送信できる。
+                      ・デメリット：URLに検索条件が残らないため結果画面の共有ができず、ブラウザ更新時に「再送信」の警告が出る。
+                 -->
                 <form th:action="@{/task1}" method="get" class="search-box" style="margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px; width: fit-content;">
                   <label for="organizationId" style="white-space: nowrap; font-weight: bold; font-size: 0.88rem;">組織ID：</label>
                   <!-- Thymeleaf: th:value で Controller (model.addAttribute("orgId", ...)) の値を初期セット -->
@@ -108,12 +117,16 @@
               <summary style="padding: 10px 16px; cursor: pointer; font-weight: bold; font-size: 0.85rem; color: #38bdf8; user-select: none;">
                 裏側で実行されているSQLを表示（クリックで開閉）
               </summary>
-              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155;">
-                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; line-height: 1.5;">
-                  SELECT organization_id, organization_code<br>
-                  FROM mtl_parameters<br>
+              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155; overflow-x: auto;">
+                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.85rem; color: #f1f5f9; line-height: 1.6; white-space: nowrap;">
+                  SELECT<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;organization_id,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;organization_code<br>
+                  FROM<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;mtl_parameters<br>
                   <!-- Thymeleaf: 検索パラメータをSQLプレビューに動的反映 -->
-                  WHERE organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '43'}">43</span>;
+                  WHERE<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '43'}">43</span>;
                 </code>
               </div>
             </details>

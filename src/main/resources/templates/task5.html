@@ -145,15 +145,24 @@
               <summary style="padding: 10px 16px; cursor: pointer; font-weight: bold; font-size: 0.85rem; color: #38bdf8; user-select: none;">
                 裏側で実行されているSQLを表示（クリックで開閉）
               </summary>
-              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155;">
-                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; line-height: 1.5;">
-                  SELECT p.organization_code, i.segment1, q.subinventory_code, q.transaction_uom_code AS uom_code, q.transaction_quantity AS primary_quantity<br>
-                  FROM mtl_onhand_quantities_detail q<br>
-                  JOIN mtl_system_items_b i ON q.inventory_item_id = i.inventory_item_id AND q.organization_id = i.organization_id<br>
-                  JOIN mtl_parameters p ON q.organization_id = p.organization_id<br>
-                  <!-- Thymeleaf: 入力値に応じた動的SQL表示 -->
-                  WHERE q.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '44'}">44</span><br>
-                  &nbsp;&nbsp;AND q.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10002'}">10002</span>;
+              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155; overflow-x: auto;">
+                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.85rem; color: #f1f5f9; line-height: 1.6; white-space: nowrap;">
+                  SELECT<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;p.organization_code,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;i.segment1,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;q.subinventory_code,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;q.transaction_uom_code AS uom_code,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;q.transaction_quantity AS primary_quantity<br>
+                  FROM<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;mtl_onhand_quantities_detail q<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN mtl_system_items_b i<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON q.inventory_item_id = i.inventory_item_id<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND q.organization_id = i.organization_id<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN mtl_parameters p<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON q.organization_id = p.organization_id<br>
+                  WHERE<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;q.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '44'}">44</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;AND q.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10002'}">10002</span>;
                 </code>
               </div>
             </details>

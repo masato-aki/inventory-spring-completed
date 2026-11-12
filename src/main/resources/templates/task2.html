@@ -120,14 +120,19 @@
               <summary style="padding: 10px 16px; cursor: pointer; font-weight: bold; font-size: 0.85rem; color: #38bdf8; user-select: none;">
                 裏側で実行されているSQLを表示（クリックで開閉）
               </summary>
-              <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155;">
-                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; color: #f1f5f9; line-height: 1.5;">
-                  SELECT p.organization_code, i.segment1<br>
-                  FROM mtl_system_items_b i<br>
-                  JOIN mtl_parameters p ON i.organization_id = p.organization_id<br>
+             <div style="padding: 12px 16px; background-color: #1e293b; border-top: 1px solid #334155; overflow-x: auto;">
+                <code style="display: block; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.85rem; color: #f1f5f9; line-height: 1.6; white-space: nowrap;">
+                  SELECT<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;p.organization_code,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;i.segment1<br>
+                  FROM<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;mtl_system_items_b i<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN mtl_parameters p<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON i.organization_id = p.organization_id<br>
                   <!-- Thymeleaf: フォームに入力された検索値を三項演算子でプレビューSQLに埋め込み -->
-                  WHERE i.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '43'}">43</span><br>
-                  &nbsp;&nbsp;AND i.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10004'}">10004</span>;
+                  WHERE<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;i.organization_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${orgId != null and !#strings.isEmpty(orgId) ? orgId : '43'}">43</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;AND i.inventory_item_id = <span style="color: #f43f5e; font-weight: bold;" th:text="${itemId != null and !#strings.isEmpty(itemId) ? itemId : '10004'}">10004</span>;
                 </code>
               </div>
             </details>
